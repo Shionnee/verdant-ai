@@ -122,8 +122,8 @@ export default function PlantDossier({ plantData, onBack, onSaveToggle, isSaved,
             <Sun size={11} style={{ color: "var(--secondary)" }} />
           </div>
           <div style={{ display: "flex", flexDirection: "column", lineHeight: "1" }}>
-            <span style={{ fontSize: "8px", color: "var(--text-muted)", fontWeight: "600", textTransform: "uppercase" }}>Light</span>
-            <span style={{ fontSize: "11px", color: "var(--text-main)", fontWeight: "700", marginTop: "1px" }}>{lightPct}%</span>
+            <span style={{ fontSize: "10px", color: "var(--text-muted)", fontWeight: "600", textTransform: "uppercase" }}>Light</span>
+            <span style={{ fontSize: "12px", color: "var(--text-main)", fontWeight: "700", marginTop: "1px" }}>{lightPct}%</span>
           </div>
         </div>
 
@@ -141,8 +141,8 @@ export default function PlantDossier({ plantData, onBack, onSaveToggle, isSaved,
             <Droplets size={11} style={{ color: "var(--primary)" }} />
           </div>
           <div style={{ display: "flex", flexDirection: "column", lineHeight: "1" }}>
-            <span style={{ fontSize: "8px", color: "var(--text-muted)", fontWeight: "600", textTransform: "uppercase" }}>Water</span>
-            <span style={{ fontSize: "11px", color: "var(--text-main)", fontWeight: "700", marginTop: "1px" }}>{waterPct}%</span>
+            <span style={{ fontSize: "10px", color: "var(--text-muted)", fontWeight: "600", textTransform: "uppercase" }}>Water</span>
+            <span style={{ fontSize: "12px", color: "var(--text-main)", fontWeight: "700", marginTop: "1px" }}>{waterPct}%</span>
           </div>
         </div>
 
@@ -160,8 +160,8 @@ export default function PlantDossier({ plantData, onBack, onSaveToggle, isSaved,
             <Wind size={11} style={{ color: "var(--info)" }} />
           </div>
           <div style={{ display: "flex", flexDirection: "column", lineHeight: "1" }}>
-            <span style={{ fontSize: "8px", color: "var(--text-muted)", fontWeight: "600", textTransform: "uppercase" }}>Humidity</span>
-            <span style={{ fontSize: "11px", color: "var(--text-main)", fontWeight: "700", marginTop: "1px" }}>{humidityPct}%</span>
+            <span style={{ fontSize: "10px", color: "var(--text-muted)", fontWeight: "600", textTransform: "uppercase" }}>Humidity</span>
+            <span style={{ fontSize: "12px", color: "var(--text-main)", fontWeight: "700", marginTop: "1px" }}>{humidityPct}%</span>
           </div>
         </div>
 
