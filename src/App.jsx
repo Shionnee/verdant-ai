@@ -9,14 +9,32 @@ import Navigation from "./components/Navigation";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("home");
-  const [theme, setTheme] = useState(() => localStorage.getItem("verdant_theme") || "light");
-  const [layoutMode, setLayoutMode] = useState(() => localStorage.getItem("verdant_layout_mode") || "mobile");
+
+  // Helper to load localStorage with automatic legacy fallback migration
+  const getStoredItem = (newKey, oldKey, defaultValue) => {
+    try {
+      const val = localStorage.getItem(newKey);
+      if (val !== null) return val;
+      const oldVal = localStorage.getItem(oldKey);
+      if (oldVal !== null) {
+        localStorage.setItem(newKey, oldVal);
+        localStorage.removeItem(oldKey); // Clean up legacy key
+        return oldVal;
+      }
+    } catch (e) {
+      console.warn("Storage migration failed", e);
+    }
+    return defaultValue;
+  };
+
+  const [theme, setTheme] = useState(() => getStoredItem("petal_parchment_theme", "verdant_theme", "light"));
+  const [layoutMode, setLayoutMode] = useState(() => getStoredItem("petal_parchment_layout_mode", "verdant_layout_mode", "mobile"));
   
   // State from localStorage
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem("verdant_gemini_key") || "");
+  const [apiKey, setApiKey] = useState(() => getStoredItem("petal_parchment_gemini_key", "verdant_gemini_key", ""));
   const [savedPlants, setSavedPlants] = useState(() => {
     try {
-      const stored = localStorage.getItem("verdant_saved_plants");
+      const stored = getStoredItem("petal_parchment_saved_plants", "verdant_saved_plants", null);
       return stored ? JSON.parse(stored) : [];
     } catch (e) {
       return [];
@@ -31,29 +49,30 @@ export default function App() {
 
   // Sync saved plants to localStorage
   useEffect(() => {
-    localStorage.setItem("verdant_saved_plants", JSON.stringify(savedPlants));
+    localStorage.setItem("petal_parchment_saved_plants", JSON.stringify(savedPlants));
   }, [savedPlants]);
 
   // Sync theme to document element
   useEffect(() => {
-    localStorage.setItem("verdant_theme", theme);
+    localStorage.setItem("petal_parchment_theme", theme);
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
   // Sync layout mode to document element
   useEffect(() => {
-    localStorage.setItem("verdant_layout_mode", layoutMode);
+    localStorage.setItem("petal_parchment_layout_mode", layoutMode);
     document.documentElement.setAttribute("data-layout-mode", layoutMode);
   }, [layoutMode]);
 
   // Sync API key to localStorage
   const handleSaveApiKey = (key) => {
-    localStorage.setItem("verdant_gemini_key", key);
+    localStorage.setItem("petal_parchment_gemini_key", key);
     setApiKey(key);
   };
 
   const handleClearApiKey = () => {
-    localStorage.removeItem("verdant_gemini_key");
+    localStorage.removeItem("petal_parchment_gemini_key");
+    localStorage.removeItem("verdant_gemini_key"); // Make sure old key is wiped clean
     setApiKey("");
   };
 

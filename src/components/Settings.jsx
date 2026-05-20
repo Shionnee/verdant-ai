@@ -40,11 +40,18 @@ export default function Settings({ apiKey, onSaveApiKey, onClearApiKey, onHydrat
 
   return (
     <div className="screen-container">
-      {/* Settings Title */}
-      <h2 style={{ fontSize: "22px", marginBottom: "6px", marginTop: "10px" }}>System Configuration</h2>
-      <p style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "20px" }}>
-        Configure AI node and manage local garden databases.
-      </p>
+      {/* Whimsical Brand Header */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", marginBottom: "24px", marginTop: "10px" }}>
+        <div style={{ width: "76px", height: "76px", borderRadius: "50%", overflow: "hidden", border: "1.5px solid var(--primary)", padding: "2px", background: "var(--bg-card)", display: "flex", justifyContent: "center", alignItems: "center", boxShadow: "var(--shadow-md)", transition: "transform var(--t-fast)" }}>
+          <img src="/logo.png" alt="Petal & Parchment Logo" style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }} />
+        </div>
+        <h2 style={{ fontSize: "24px", fontFamily: "var(--font-header)", fontWeight: "400", marginTop: "12px", color: "var(--text-main)" }}>
+          Petal & Parchment
+        </h2>
+        <p style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "1.5px", color: "var(--text-muted)", marginTop: "2px", fontWeight: "700" }}>
+          conservatory management
+        </p>
+      </div>
 
       {/* Visual Theme Selection Widget */}
       <div className="glass-card" style={{ marginBottom: "20px" }}>
@@ -289,7 +296,7 @@ export default function Settings({ apiKey, onSaveApiKey, onClearApiKey, onHydrat
           onClick={handleHydrate}
           style={{ width: "100%", padding: "10px 16px", fontSize: "12.5px", display: "flex", gap: "8px", justifyContent: "center" }}
         >
-          <RefreshCw size={14} /> Populate Demo Plants
+          <RefreshCw size={14} /> Populate Conservatory Archives
         </button>
       </div>
 
@@ -297,7 +304,7 @@ export default function Settings({ apiKey, onSaveApiKey, onClearApiKey, onHydrat
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", marginTop: "10px", opacity: 0.5 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", color: "var(--text-muted)" }}>
           <Info size={12} />
-          <span>Verdant AI - Client Node v1.2.0</span>
+          <span>Petal & Parchment - Journal Node v1.2.0</span>
         </div>
         <p style={{ fontSize: "9px", color: "var(--text-muted)" }}>
           Pair-programmed by Google DeepMind Antigravity AI

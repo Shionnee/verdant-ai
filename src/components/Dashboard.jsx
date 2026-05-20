@@ -36,12 +36,34 @@ export default function Dashboard({ savedPlants, onSelectPlant, onNavigateToScan
   return (
     <div className="screen-container">
       {/* Dashboard Custom Profile Header */}
-      <div className="dashboard-header">
-        <div>
-          <p style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "2.5px", fontWeight: "700", fontFamily: "var(--font-body)" }}>the botanical journal</p>
-          <h2 style={{ fontSize: "28px", marginTop: "4px", fontFamily: "var(--font-header)", fontWeight: "400" }}>
-            welcome to your <span className="italic-serif">green room</span> 🌱
-          </h2>
+      <div className="dashboard-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px", paddingBottom: "14px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {/* Brand Logo Emblem */}
+          <div style={{
+            width: "46px",
+            height: "46px",
+            borderRadius: "50%",
+            border: "1.5px solid var(--primary)",
+            padding: "2px",
+            background: "var(--bg-card)",
+            boxShadow: "var(--shadow-sm)",
+            flexShrink: 0,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
+            <img 
+              src="/logo.png" 
+              alt="Petal & Parchment Emblem" 
+              style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }} 
+            />
+          </div>
+          <div>
+            <p style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "2px", fontWeight: "700", fontFamily: "var(--font-body)", margin: 0 }}>petal & parchment</p>
+            <h2 style={{ fontSize: "22px", marginTop: "2px", fontFamily: "var(--font-header)", fontWeight: "400", margin: 0, lineHeight: "1.2", color: "var(--text-main)" }}>
+              your cozy <span className="italic-serif">conservatory</span> ✨
+            </h2>
+          </div>
         </div>
         <button 
           onClick={onToggleTheme} 
@@ -60,7 +82,8 @@ export default function Dashboard({ savedPlants, onSelectPlant, onNavigateToScan
             boxShadow: "var(--shadow-sm)",
             fontSize: "18px",
             transition: "all var(--t-fast)",
-            outline: "none"
+            outline: "none",
+            flexShrink: 0
           }}
         >
           {theme === "light" ? "🌙" : "☀️"}
@@ -364,14 +387,19 @@ export default function Dashboard({ savedPlants, onSelectPlant, onNavigateToScan
                   position: "absolute",
                   top: "12px",
                   right: "12px",
-                  background: "rgba(250, 253, 251, 0.9)",
+                  background: theme === "dark" ? "rgba(0, 0, 0, 0.45)" : "var(--bg-app)",
                   border: "1px solid var(--border-glass)",
                   borderRadius: "8px",
-                  padding: "2px 5px",
+                  padding: "2px 6px",
                   fontSize: "9px",
                   fontWeight: "700",
-                  color: plant.healthScore > 85 ? "var(--primary)" : plant.healthScore > 60 ? "var(--gold)" : "var(--crimson)",
-                  zIndex: 2
+                  color: plant.healthScore > 85 
+                    ? (theme === "dark" ? "var(--primary)" : "#385e49") 
+                    : plant.healthScore > 60 
+                      ? (theme === "dark" ? "var(--gold)" : "#836934") 
+                      : (theme === "dark" ? "var(--crimson)" : "#9c3f3f"),
+                  zIndex: 2,
+                  boxShadow: "var(--shadow-sm)"
                 }}>
                   {plant.healthScore}%
                 </div>
