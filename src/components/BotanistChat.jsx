@@ -325,195 +325,245 @@ export default function BotanistChat({ apiKey, activePlantContext, onClearContex
 
   const activeAgent = AGENTS.find(a => a.id === activeAgentId) || AGENTS[0];
   const suggestedPrompts = getSuggestedPrompts();
-  const currentMessages = messagesByAgent[activeAgentId] || [];
+  const currentMessages = messagesByA  // Dynamic description for the active agent in the sidebar
+  const getSidebarAgentInfo = () => {
+    switch (activeAgentId) {
+      case "flora":
+        return {
+          title: "Flora Care Alchemy Lab 🧪",
+          desc: "Consult our soil and care alchemist about custom substrate mixes, bottom-watering methods, propagation node cuttings, and root system humidity."
+        };
+      case "moss":
+        return {
+          title: "Moss Canopy Studio 🌿",
+          desc: "Arrange your space with our green whisperer. Ask about architectural plant styling, ideal companion groupings, light mapping, and pot choices."
+        };
+      default:
+        return {
+          title: "Dr. Sage Clinical Console 🧑‍🔬",
+          desc: "Examine health reports, leaf spot symptoms, and pest infestations. Dr. Sage provides organic treatment formulas and medical recovery timelines."
+        };
+    }
+  };
+
+  const sidebarInfo = getSidebarAgentInfo();
 
   return (
     <div className="screen-container" style={{ padding: "0" }}>
       <div className="chat-container">
         
-        {/* Chat Dynamic Header */}
-        <div className="chat-header" style={{ padding: "16px 20px 12px 20px" }}>
-          <div 
-            className="avatar animate-pop"
-            key={`avatar_${activeAgentId}`}
-            style={{ 
-              fontSize: "20px", 
-              fontStyle: "normal", 
-              background: "var(--primary-glow)", 
-              border: "1px solid var(--border-glass)", 
-              borderRadius: "50%", 
-              width: "42px", 
-              height: "42px", 
-              display: "flex", 
-              justifyContent: "center", 
-              alignItems: "center" 
-            }}
-          >
-            {activeAgent.avatar}
-          </div>
-          <div className="botanist-info" style={{ flex: 1, marginLeft: "12px" }}>
-            <h3 style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              {activeAgent.name}
-              <span style={{ fontSize: "9px", fontWeight: "700", padding: "2px 6px", borderRadius: "99px", background: "var(--primary-glow)", color: "var(--primary)", border: "1px solid rgba(74, 114, 94, 0.12)" }}>
-                {activeAgent.role.split(" ").slice(-1)[0]}
-              </span>
-            </h3>
-            <p style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }}>
-              {activeAgent.tagline}
+        {/* Left Column: Sidebar (Dynamic on desktop, hidden descriptions on mobile) */}
+        <div className="chat-sidebar">
+          {/* Dynamic Console Card (hidden on mobile via CSS) */}
+          <div className="chat-sidebar-desc">
+            <h4 style={{ fontSize: "14px", fontWeight: "600", color: "var(--primary)", marginBottom: "6px", display: "flex", alignItems: "center", gap: "6px" }}>
+              {activeAgent.avatar} {sidebarInfo.title}
+            </h4>
+            <p style={{ fontSize: "12px", color: "var(--text-sub)", lineHeight: "1.5" }}>
+              {sidebarInfo.desc}
             </p>
+            {activePlantContext && (
+              <div style={{ 
+                marginTop: "10px", 
+                padding: "8px 12px", 
+                background: "var(--primary-glow)", 
+                border: "1px solid var(--border-glass)", 
+                borderRadius: "16px",
+                fontSize: "11px",
+                color: "var(--text-sub)"
+              }}>
+                🌱 Grounded on active diagnostics report of <strong>{activePlantContext.plantName}</strong>.
+              </div>
+            )}
           </div>
-          {activePlantContext && (
-            <button 
-              onClick={onClearContext}
-              className="camera-utility-btn" 
-              style={{ width: "32px", height: "32px", borderRadius: "8px", background: "rgba(255,255,255,0.03)" }}
-              title="Clear Active Plant Focus"
-            >
-              <LucideX size={14} />
-            </button>
-          )}
-        </div>
 
-        {/* 🌟 Segmented Multi-Agent Switcher Bar */}
-        <div style={{ padding: "0 20px 14px 20px" }}>
-          <div 
-            style={{
-              display: "flex",
-              background: "var(--bg-card)",
-              border: "1px solid var(--border-glass)",
-              borderRadius: "14px",
-              padding: "4px",
-              gap: "4px",
-              boxShadow: "var(--shadow-sm)"
-            }}
-          >
-            {AGENTS.map((agent) => {
-              const isActive = agent.id === activeAgentId;
-              return (
-                <button
-                  key={agent.id}
-                  onClick={() => setActiveAgentId(agent.id)}
-                  style={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "2px",
-                    padding: "6px 2px",
-                    border: "none",
-                    borderRadius: "10px",
-                    background: isActive ? "var(--primary-glow)" : "transparent",
-                    color: isActive ? "var(--primary)" : "var(--text-sub)",
-                    cursor: "pointer",
-                    transition: "all var(--t-normal)",
-                    transform: isActive ? "scale(1.02)" : "scale(1)",
-                    border: isActive ? "1px solid var(--border-glow)" : "1px solid transparent",
-                    boxShadow: isActive ? "var(--shadow-sm)" : "none",
-                    outline: "none"
-                  }}
-                >
-                  <span style={{ fontSize: "16px" }}>{agent.avatar}</span>
-                  <span style={{ fontSize: "10px", fontWeight: isActive ? "700" : "500", letterSpacing: "0.2px" }}>
-                    {agent.name}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Active Plant Context Banner */}
-        {activePlantContext && (
-          <div style={{ 
-            margin: "0 20px 12px 20px", 
-            padding: "8px 14px", 
-            background: "var(--bg-card)", 
-            border: "1px solid var(--border-glass)", 
-            borderRadius: "99px", 
-            display: "flex", 
-            justifyContent: "space-between", 
-            alignItems: "center",
-            boxShadow: "var(--shadow-sm)"
-          }}>
-            <span style={{ fontSize: "11px", color: "var(--text-sub)", fontWeight: "500", display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--primary)" }}></span>
-              Focus: <strong style={{ color: "var(--text-main)", fontWeight: "600" }}>{activePlantContext.plantName}</strong> <span style={{ color: "var(--text-muted)" }}>({activePlantContext.conditionName})</span>
-            </span>
-            <button 
-              onClick={onClearContext}
+          {/* 🌟 Segmented Multi-Agent Switcher Bar */}
+          <div className="chat-sidebar-switcher" style={{ width: "100%" }}>
+            <div 
               style={{
-                background: "none",
-                border: "none",
-                color: "var(--text-muted)",
-                cursor: "pointer",
                 display: "flex",
-                alignItems: "center",
-                padding: "2px",
-                borderRadius: "50%",
-                transition: "color var(--t-fast)"
+                background: "var(--bg-card)",
+                border: "1px solid var(--border-glass)",
+                borderRadius: "99px",
+                padding: "4px",
+                gap: "4px",
+                boxShadow: "var(--shadow-sm)"
               }}
-              title="Clear Active Plant Focus"
             >
-              <LucideX size={12} />
-            </button>
-          </div>
-        )}
-
-        {/* Chat Logs Window */}
-        <div className="chat-history" style={{ padding: "0 20px" }}>
-          {currentMessages.map((msg) => (
-            <div key={msg.id} className={`chat-bubble ${msg.sender} ${msg.sender === "bot" ? activeAgentId : ""}`}>
-              {msg.sender === "bot" ? parseMarkdown(msg.text) : <p>{msg.text}</p>}
+              {AGENTS.map((agent) => {
+                const isActive = agent.id === activeAgentId;
+                return (
+                  <button
+                    key={agent.id}
+                    onClick={() => setActiveAgentId(agent.id)}
+                    style={{
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "2px",
+                      padding: "6px 2px",
+                      border: "none",
+                      borderRadius: "99px",
+                      background: isActive ? "var(--primary-glow)" : "transparent",
+                      color: isActive ? "var(--primary)" : "var(--text-sub)",
+                      cursor: "pointer",
+                      transition: "all var(--t-normal)",
+                      transform: isActive ? "scale(1.02)" : "scale(1)",
+                      border: isActive ? "1px solid var(--border-glow)" : "1px solid transparent",
+                      boxShadow: isActive ? "var(--shadow-sm)" : "none",
+                      outline: "none"
+                    }}
+                  >
+                    <span style={{ fontSize: "16px" }}>{agent.avatar}</span>
+                    <span style={{ fontSize: "10px", fontWeight: isActive ? "700" : "500", letterSpacing: "0.2px" }}>
+                      {agent.name}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-          ))}
+          </div>
 
-          {/* Typing Loading Indicator */}
-          {loading && (
-            <div className={`chat-typing-indicator ${activeAgentId}`}>
-              <div className="typing-dot"></div>
-              <div className="typing-dot"></div>
-              <div className="typing-dot"></div>
+          {/* Active Plant Context Banner (only inside sidebar for a consolidated stack) */}
+          {activePlantContext && (
+            <div style={{ 
+              padding: "8px 14px", 
+              background: "var(--bg-card)", 
+              border: "1px solid var(--border-glass)", 
+              borderRadius: "99px", 
+              display: "flex", 
+              justifyContent: "space-between", 
+              alignItems: "center",
+              boxShadow: "var(--shadow-sm)",
+              width: "100%"
+            }}>
+              <span style={{ fontSize: "11.5px", color: "var(--text-sub)", fontWeight: "500", display: "flex", alignItems: "center", gap: "6px" }}>
+                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--primary)" }}></span>
+                Focus: <strong style={{ color: "var(--text-main)", fontWeight: "600" }}>{activePlantContext.plantName}</strong>
+              </span>
+              <button 
+                onClick={onClearContext}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--text-muted)",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "2px",
+                  borderRadius: "50%",
+                  transition: "color var(--t-fast)"
+                }}
+                title="Clear Active Plant Focus"
+              >
+                <LucideX size={12} />
+              </button>
             </div>
           )}
-          
-          <div ref={chatEndRef} />
         </div>
 
-        {/* Message Input & Quick Suggested Pills Bar */}
-        <div style={{ padding: "10px 20px 0 20px", display: "flex", flexDirection: "column" }}>
-          
-          {/* Dynamic Suggestion Pills */}
-          <div className="chat-suggested-prompts">
-            {suggestedPrompts.map((p, idx) => (
+        {/* Right Column: Chat Window Console */}
+        <div className="chat-main">
+          {/* Chat Dynamic Header */}
+          <div className="chat-header" style={{ padding: "16px 20px 12px 20px" }}>
+            <div 
+              className="avatar animate-pop"
+              key={`avatar_${activeAgentId}`}
+              style={{ 
+                fontSize: "20px", 
+                fontStyle: "normal", 
+                background: "var(--primary-glow)", 
+                border: "1px solid var(--border-glass)", 
+                borderRadius: "50%", 
+                width: "42px", 
+                height: "42px", 
+                display: "flex", 
+                justifyContent: "center", 
+                alignItems: "center" 
+              }}
+            >
+              {activeAgent.avatar}
+            </div>
+            <div className="botanist-info" style={{ flex: 1, marginLeft: "12px" }}>
+              <h3 style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                {activeAgent.name}
+                <span style={{ fontSize: "9px", fontWeight: "700", padding: "2px 6px", borderRadius: "99px", background: "var(--primary-glow)", color: "var(--primary)", border: "1px solid rgba(74, 114, 94, 0.12)" }}>
+                  {activeAgent.role.split(" ").slice(-1)[0]}
+                </span>
+              </h3>
+              <p style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }}>
+                {activeAgent.tagline}
+              </p>
+            </div>
+            {activePlantContext && (
               <button 
-                key={idx} 
-                className="chat-prompt-pill"
-                onClick={() => handleSendMessage(p)}
-                disabled={loading}
+                onClick={onClearContext}
+                className="camera-utility-btn" 
+                style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(255,255,255,0.03)" }}
+                title="Clear Active Plant Focus"
               >
-                {p}
+                <LucideX size={14} />
               </button>
-            ))}
+            )}
           </div>
 
-          {/* Typing Area */}
-          <div className="chat-input-area">
-            <input 
-              type="text" 
-              placeholder={activePlantContext ? `Ask ${activeAgent.name} about this plant...` : activeAgent.placeholder}
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-              onKeyPress={handleKeyPress}
-              disabled={loading}
-            />
-            <button 
-              className="chat-send-btn" 
-              onClick={() => handleSendMessage()}
-              disabled={!inputVal.trim() || loading}
-              aria-label="Send Message"
-            >
-              <Send size={16} />
-            </button>
+          {/* Chat Logs Window */}
+          <div className="chat-history" style={{ padding: "0 20px" }}>
+            {currentMessages.map((msg) => (
+              <div key={msg.id} className={`chat-bubble ${msg.sender} ${msg.sender === "bot" ? activeAgentId : ""}`}>
+                {msg.sender === "bot" ? parseMarkdown(msg.text) : <p>{msg.text}</p>}
+              </div>
+            ))}
+
+            {/* Typing Loading Indicator */}
+            {loading && (
+              <div className={`chat-typing-indicator ${activeAgentId}`}>
+                <div className="typing-dot"></div>
+                <div className="typing-dot"></div>
+                <div className="typing-dot"></div>
+              </div>
+            )}
+            
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* Message Input & Quick Suggested Pills Bar */}
+          <div style={{ padding: "10px 20px 0 20px", display: "flex", flexDirection: "column" }}>
+            
+            {/* Dynamic Suggestion Pills */}
+            <div className="chat-suggested-prompts">
+              {suggestedPrompts.map((p, idx) => (
+                <button 
+                  key={idx} 
+                  className="chat-prompt-pill"
+                  onClick={() => handleSendMessage(p)}
+                  disabled={loading}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+
+            {/* Typing Area */}
+            <div className="chat-input-area">
+              <input 
+                type="text" 
+                placeholder={activePlantContext ? `Ask ${activeAgent.name} about this plant...` : activeAgent.placeholder}
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+                onKeyPress={handleKeyPress}
+                disabled={loading}
+              />
+              <button 
+                className="chat-send-btn" 
+                onClick={() => handleSendMessage()}
+                disabled={!inputVal.trim() || loading}
+                aria-label="Send Message"
+              >
+                <Send size={16} />
+              </button>
+            </div>
           </div>
         </div>
 

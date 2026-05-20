@@ -389,8 +389,8 @@ export default function Dashboard({ savedPlants, onSelectPlant, onNavigateToScan
                   right: "12px",
                   background: theme === "dark" ? "rgba(0, 0, 0, 0.45)" : "var(--bg-app)",
                   border: "1px solid var(--border-glass)",
-                  borderRadius: "8px",
-                  padding: "2px 6px",
+                  borderRadius: "99px",
+                  padding: "2px 8px",
                   fontSize: "9px",
                   fontWeight: "700",
                   color: plant.healthScore > 85 

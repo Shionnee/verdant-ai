@@ -62,7 +62,7 @@ export default function Settings({ apiKey, onSaveApiKey, onClearApiKey, onHydrat
         <div style={{ 
           display: "flex", 
           background: "rgba(74, 114, 94, 0.04)", 
-          borderRadius: "14px", 
+          borderRadius: "99px", 
           padding: "4px", 
           border: "1px solid var(--border-glass)"
         }}>
@@ -72,7 +72,7 @@ export default function Settings({ apiKey, onSaveApiKey, onClearApiKey, onHydrat
               flex: 1, 
               background: theme === "light" ? "var(--bg-card)" : "none", 
               border: "none", 
-              borderRadius: "10px",
+              borderRadius: "99px",
               color: theme === "light" ? "var(--text-main)" : "var(--text-muted)", 
               padding: "9px 0", 
               fontWeight: "600", 
@@ -90,7 +90,7 @@ export default function Settings({ apiKey, onSaveApiKey, onClearApiKey, onHydrat
               flex: 1, 
               background: theme === "dark" ? "var(--bg-card)" : "none", 
               border: "none", 
-              borderRadius: "10px",
+              borderRadius: "99px",
               color: theme === "dark" ? "var(--text-main)" : "var(--text-muted)", 
               padding: "9px 0", 
               fontWeight: "600", 
@@ -114,7 +114,7 @@ export default function Settings({ apiKey, onSaveApiKey, onClearApiKey, onHydrat
         <div style={{ 
           display: "flex", 
           background: "rgba(74, 114, 94, 0.04)", 
-          borderRadius: "14px", 
+          borderRadius: "99px", 
           padding: "4px", 
           border: "1px solid var(--border-glass)"
         }}>
@@ -124,7 +124,7 @@ export default function Settings({ apiKey, onSaveApiKey, onClearApiKey, onHydrat
               flex: 1, 
               background: layoutMode === "mobile" ? "var(--bg-card)" : "none", 
               border: "none", 
-              borderRadius: "10px",
+              borderRadius: "99px",
               color: layoutMode === "mobile" ? "var(--text-main)" : "var(--text-muted)", 
               padding: "9px 0", 
               fontWeight: "600", 
@@ -142,7 +142,7 @@ export default function Settings({ apiKey, onSaveApiKey, onClearApiKey, onHydrat
               flex: 1, 
               background: layoutMode === "webapp" ? "var(--bg-card)" : "none", 
               border: "none", 
-              borderRadius: "10px",
+              borderRadius: "99px",
               color: layoutMode === "webapp" ? "var(--text-main)" : "var(--text-muted)", 
               padding: "9px 0", 
               fontWeight: "600", 
