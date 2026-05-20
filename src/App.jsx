@@ -128,6 +128,8 @@ export default function App() {
         return (
           <Scanner 
             apiKey={apiKey}
+            onSaveApiKey={handleSaveApiKey}
+            onClearApiKey={handleClearApiKey}
             onScanComplete={handleScanComplete}
             onCancel={() => setActiveTab("home")}
           />

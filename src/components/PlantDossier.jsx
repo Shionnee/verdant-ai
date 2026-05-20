@@ -75,27 +75,30 @@ export default function PlantDossier({ plantData, onBack, onSaveToggle, isSaved,
         }}
       >
         {/* Isolated emerging plant image with high-end dropshadow */}
+        {/* Isolated emerging plant image inside a giant editorial arch frame */}
         <div 
-          className="organic-plant-container"
+          className="editorial-arch"
           style={{
-            height: "90%",
-            width: "80%",
+            height: "190px",
+            width: "135px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             zIndex: 2,
             position: "relative",
-            marginTop: "10px"
+            marginTop: "16px",
+            background: "rgba(255, 255, 255, 0.8)",
+            boxShadow: "0 12px 32px rgba(117, 106, 96, 0.15)",
+            border: "2.5px solid var(--gold)"
           }}
         >
           <img 
             src={image || "https://images.unsplash.com/photo-1545241047-6083a3684587?w=600&auto=format&fit=crop&q=80"} 
             alt={plantName}
             style={{
-              maxHeight: "190px",
-              width: "auto",
-              objectFit: "contain",
-              filter: "drop-shadow(0 16px 28px rgba(40, 60, 48, 0.25))",
+              width: "100%",
+              height: "100%",
+              objectFit: "cover"
             }}
             onError={(e) => {
               e.target.onerror = null;
@@ -461,40 +464,57 @@ export default function PlantDossier({ plantData, onBack, onSaveToggle, isSaved,
               )}
             </div>
 
-            {/* Specs Grid */}
-            <h3 style={{ fontSize: "16px", marginBottom: "-8px", fontFamily: "var(--font-header)" }}>Care Matrix</h3>
-            <div className="care-grid">
-              <div className="care-metric-box" style={{ background: "var(--bg-card)", border: "1px solid var(--border-glass)" }}>
-                <Sun size={18} style={{ color: "var(--secondary)" }} />
-                <span style={{ fontSize: "9px", color: "var(--text-muted)", fontWeight: "600", letterSpacing: "0.5px" }}>LIGHTING</span>
-                <span style={{ fontSize: "11.5px", color: "var(--text-main)", fontWeight: "600", lineHeight: "1.35" }}>
-                  {light.length > 42 ? light.substring(0, 42) + "..." : light}
-                </span>
-              </div>
-
-              <div className="care-metric-box" style={{ background: "var(--bg-card)", border: "1px solid var(--border-glass)" }}>
-                <Droplets size={18} style={{ color: "var(--primary)" }} />
-                <span style={{ fontSize: "9px", color: "var(--text-muted)", fontWeight: "600", letterSpacing: "0.5px" }}>WATER</span>
-                <span style={{ fontSize: "11.5px", color: "var(--text-main)", fontWeight: "600", lineHeight: "1.35" }}>
-                  {water.length > 42 ? water.substring(0, 42) + "..." : water}
-                </span>
-              </div>
-
-              <div className="care-metric-box" style={{ background: "var(--bg-card)", border: "1px solid var(--border-glass)" }}>
-                <Wind size={18} style={{ color: "var(--info)" }} />
-                <span style={{ fontSize: "9px", color: "var(--text-muted)", fontWeight: "600", letterSpacing: "0.5px" }}>HUMIDITY</span>
-                <span style={{ fontSize: "11.5px", color: "var(--text-main)", fontWeight: "600", lineHeight: "1.35" }}>
-                  {humidity}
-                </span>
-              </div>
-
-              <div className="care-metric-box" style={{ background: "var(--bg-card)", border: "1px solid var(--border-glass)" }}>
-                <Thermometer size={18} style={{ color: "var(--gold)" }} />
-                <span style={{ fontSize: "9px", color: "var(--text-muted)", fontWeight: "600", letterSpacing: "0.5px" }}>TEMPERATURE</span>
-                <span style={{ fontSize: "11.5px", color: "var(--text-main)", fontWeight: "600", lineHeight: "1.35" }}>
-                  {temperature}
-                </span>
-              </div>
+            {/* Specs Table */}
+            <h3 className="italic-serif" style={{ fontSize: "19px", marginBottom: "-8px", color: "var(--text-main)", fontWeight: "600" }}>Care Parameters</h3>
+            <div className="glass-card" style={{ padding: "8px 16px", background: "var(--bg-card)" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", border: "none" }}>
+                <tbody>
+                  <tr style={{ borderBottom: "1px solid var(--border-glass)" }}>
+                    <td style={{ padding: "14px 0 14px 4px", width: "40px", verticalAlign: "middle" }}>
+                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(249, 195, 195, 0.12)", display: "flex", color: "var(--secondary)" }}>
+                        <Sun size={15} style={{ margin: "auto" }} />
+                      </div>
+                    </td>
+                    <td style={{ padding: "14px 8px", verticalAlign: "middle" }}>
+                      <span style={{ fontSize: "9px", color: "var(--text-muted)", fontWeight: "700", letterSpacing: "1px", display: "block", textTransform: "uppercase" }}>Light Requirements</span>
+                      <span style={{ fontSize: "13px", color: "var(--text-main)", fontWeight: "500", marginTop: "2px", display: "block", lineHeight: "1.4" }}>{light}</span>
+                    </td>
+                  </tr>
+                  <tr style={{ borderBottom: "1px solid var(--border-glass)" }}>
+                    <td style={{ padding: "14px 0 14px 4px", width: "40px", verticalAlign: "middle" }}>
+                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(197, 180, 165, 0.15)", display: "flex", color: "var(--primary)" }}>
+                        <Droplets size={15} style={{ margin: "auto" }} />
+                      </div>
+                    </td>
+                    <td style={{ padding: "14px 8px", verticalAlign: "middle" }}>
+                      <span style={{ fontSize: "9px", color: "var(--text-muted)", fontWeight: "700", letterSpacing: "1px", display: "block", textTransform: "uppercase" }}>Watering Cadence</span>
+                      <span style={{ fontSize: "13px", color: "var(--text-main)", fontWeight: "500", marginTop: "2px", display: "block", lineHeight: "1.4" }}>{water}</span>
+                    </td>
+                  </tr>
+                  <tr style={{ borderBottom: "1px solid var(--border-glass)" }}>
+                    <td style={{ padding: "14px 0 14px 4px", width: "40px", verticalAlign: "middle" }}>
+                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(131, 171, 194, 0.12)", display: "flex", color: "var(--info)" }}>
+                        <Wind size={15} style={{ margin: "auto" }} />
+                      </div>
+                    </td>
+                    <td style={{ padding: "14px 8px", verticalAlign: "middle" }}>
+                      <span style={{ fontSize: "9px", color: "var(--text-muted)", fontWeight: "700", letterSpacing: "1px", display: "block", textTransform: "uppercase" }}>Humidity Level</span>
+                      <span style={{ fontSize: "13px", color: "var(--text-main)", fontWeight: "500", marginTop: "2px", display: "block", lineHeight: "1.4" }}>{humidity}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: "14px 0 14px 4px", width: "40px", verticalAlign: "middle" }}>
+                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "rgba(244, 227, 193, 0.2)", display: "flex", color: "var(--gold)" }}>
+                        <Thermometer size={15} style={{ margin: "auto" }} />
+                      </div>
+                    </td>
+                    <td style={{ padding: "14px 8px", verticalAlign: "middle" }}>
+                      <span style={{ fontSize: "9px", color: "var(--text-muted)", fontWeight: "700", letterSpacing: "1px", display: "block", textTransform: "uppercase" }}>Ideal Temperature</span>
+                      <span style={{ fontSize: "13px", color: "var(--text-main)", fontWeight: "500", marginTop: "2px", display: "block", lineHeight: "1.4" }}>{temperature}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             {/* Toxicity Warning block */}

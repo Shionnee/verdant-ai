@@ -1,14 +1,14 @@
 /* 
-  VERDANT AI - "Forest Fairy & iOS Premium" Soft Light Design System
-  Aesthetics: Ethereal Light Nature, Frosted Glass, Rose Gold & Sage Accents, Elegant Serif Fonts.
+  VERDANT AI - "Peony & Porcelain" Soft Lush Whimsical Luxury Editorial Design System
+  Aesthetics: Ethereal Warm Porcelain, Soft Peony Blush Pink, Champagne Gold, Exquisite Serifs.
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root, [data-theme="light"] {
   /* Fonts */
-  --font-header: 'Philosopher', 'Playfair Display', serif;
-  --font-body: 'Inter', sans-serif;
+  --font-header: 'Cormorant Garamond', 'Philosopher', 'Playfair Display', serif;
+  --font-body: 'Plus Jakarta Sans', 'Inter', sans-serif;
   
   /* Layout Dimensions */
   --phone-width: 412px;
@@ -18,71 +18,75 @@
   --t-fast: 0.15s ease;
   --t-normal: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1); /* Ethereal spring physics curve */
   
-  /* Colors - Soft Forest Fairy (Light) Theme */
-  --bg-app: #f2f7f4;             /* Soft dreamy misty moss green */
-  --bg-phone: #f9fbf9;           /* Pristine morning dew-drop white */
+  /* Colors - Soft Peony & Porcelain (Light) Theme */
+  --bg-app: #fbf9f6;             /* Warm soft clay porcelain off-white */
+  --bg-phone: #fffdfc;           /* Pure morning porcelain rose-white */
   --bg-card: #ffffff;            /* Solid warm white card surfaces */
-  --bg-card-hover: #ffffff;
-  --border-glass: rgba(122, 158, 137, 0.12); /* Delicate moss outline */
-  --border-glow: rgba(213, 176, 103, 0.4);    /* Warm gold sparkle glow */
+  --bg-card-hover: #fffefe;
+  --border-glass: rgba(197, 180, 165, 0.18); /* Soft mushroom taupe trim */
+  --border-glow: rgba(249, 195, 195, 0.4);    /* Glowing peony blush pink */
   
-  --primary: #4a725e;            /* Soft moss forest green */
-  --primary-rgb: 74, 114, 94;
-  --primary-glow: rgba(74, 114, 94, 0.05);
-  --primary-hover: #3d5e4d;
+  --primary: #c5b4a5;            /* Mushroom Taupe */
+  --primary-rgb: 197, 180, 165;
+  --primary-glow: rgba(197, 180, 165, 0.08);
+  --primary-hover: #bcae9f;
   
-  --secondary: #d5b067;          /* Soft fairy dust gold */
-  --secondary-rgb: 213, 176, 103;
-  --gold: #da9c88;               /* Dreamy peach rose gold */
-  --gold-rgb: 218, 156, 136;
+  --secondary: #f9c3c3;          /* Peony Blush Pink */
+  --secondary-rgb: 249, 195, 195;
+  --gold: #f4e3c1;               /* Champagne Gold */
+  --gold-rgb: 244, 227, 193;
   --crimson: #d67b7b;            /* Soft cherry blossom red */
   --crimson-rgb: 214, 123, 123;
   --info: #83abc2;               /* Misty sky blue */
+  --green: #cdecd4;              /* Sprout Green */
+  --green-rgb: 205, 236, 212;
   
-  --text-main: #1b2a22;          /* Deep rich charcoal-forest */
-  --text-sub: #496354;           /* Gentle leaves green */
-  --text-muted: #7fa48f;         /* Foggy moss green */
+  --text-main: #3a332e;          /* Deep rich warm espresso */
+  --text-sub: #756a60;           /* Soft mushroom taupe grey */
+  --text-muted: #b5a89c;         /* Light warm fog taupe */
   
-  --shadow-sm: 0 4px 16px rgba(74, 114, 94, 0.02);
-  --shadow-md: 0 12px 32px rgba(40, 60, 48, 0.05); /* Premium organic green-tinted shadow */
-  --shadow-lg: 0 20px 48px rgba(40, 60, 48, 0.08);
+  --shadow-sm: 0 4px 16px rgba(197, 180, 165, 0.03);
+  --shadow-md: 0 12px 32px rgba(120, 110, 100, 0.06); /* Premium organic warm taupe-tinted shadow */
+  --shadow-lg: 0 20px 48px rgba(120, 110, 100, 0.1);
   
-  --bezel-color: #e4ebe6;        /* Beautiful matte soft-green hardware bezel */
-  --bg-nav: #14201a;             /* Premium dark bottom dock */
+  --bezel-color: #e6ded6;        /* Elegant matte mushroom taupe bezel */
+  --bg-nav: #29231e;             /* Premium dark espresso bottom dock */
 }
 
 [data-theme="dark"] {
-  /* Colors - Mystical Night Forest (Dark) Theme */
-  --bg-app: #060b08;             /* Mystical midnight forest shadow */
-  --bg-phone: #0c1410;           /* Ethereal deep jade twilight */
-  --bg-card: #131e18;            /* Solid dark moss cards */
-  --bg-card-hover: #17241d;
-  --border-glass: rgba(109, 160, 130, 0.16); /* Glowing emerald jade border */
-  --border-glow: rgba(236, 197, 112, 0.4);    /* Radiant firefly gold border */
+  /* Colors - Midnight Peony (Dark) Theme */
+  --bg-app: #16110d;             /* Deep warm espresso clay */
+  --bg-phone: #1f1a15;           /* Deep dark mushroom chocolate */
+  --bg-card: #29231e;            /* Soft charcoal-clay cards */
+  --bg-card-hover: #2e2822;
+  --border-glass: rgba(249, 195, 195, 0.1); /* Soft pink haze border */
+  --border-glow: rgba(249, 195, 195, 0.35);   /* Glowing peony blush border */
   
-  --primary: #71a687;            /* Luminous star-lit jade green */
-  --primary-rgb: 109, 160, 135;
-  --primary-glow: rgba(109, 160, 135, 0.1);
-  --primary-hover: #86b89b;
+  --primary: #e2d7ce;            /* Luminous warm taupe */
+  --primary-rgb: 226, 215, 206;
+  --primary-glow: rgba(226, 215, 206, 0.1);
+  --primary-hover: #ede3dc;
   
-  --secondary: #ecc570;          /* Glowing firefly gold */
-  --secondary-rgb: 236, 197, 112;
-  --gold: #e3a48e;               /* Luminous starlit peach rose */
-  --gold-rgb: 227, 164, 142;
+  --secondary: #faa2a2;          /* Glowing peony blush */
+  --secondary-rgb: 250, 162, 162;
+  --gold: #f3dca2;               /* Luminous champagne gold */
+  --gold-rgb: 243, 220, 162;
   --crimson: #e99494;            /* Glowing blossom crimson */
   --crimson-rgb: 233, 148, 148;
   --info: #9dc3d6;               /* Mystical night sky blue */
+  --green: #a9dfb7;              /* Luminous sprout green */
+  --green-rgb: 169, 223, 183;
   
-  --text-main: #ecf5f0;          /* Luminous ivory dewdrops */
-  --text-sub: #b2c9bd;           /* Soft moon-lit leaf green */
-  --text-muted: #7fa48f;         /* Foggy moss green */
+  --text-main: #faf6f2;          /* Ivory porcelain white */
+  --text-sub: #c9beb5;           /* Soft rose-clay */
+  --text-muted: #93867c;         /* Muted espresso clay */
   
-  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 12px 36px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 12px 36px rgba(0, 0, 0, 0.42);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.55);
   
-  --bezel-color: #16241c;        /* Deep matte jade hardware bezel */
-  --bg-nav: #090e0c;             /* Premium dark bottom dock in dark mode */
+  --bezel-color: #2e2822;        /* Matte espresso clay bezel */
+  --bg-nav: #16110d;             /* Dark bottom dock in dark mode */
 }
 
 /* --- Base Resets & Global Styles --- */
@@ -105,11 +109,11 @@ body {
   letter-spacing: -0.01em;
   transition: background var(--t-normal), color var(--t-normal);
   
-  /* Soft, dreamy organic warm radial spotlights - now dynamic! */
+  /* Soft, dreamy organic warm radial spotlights - Peony & Porcelain themed! */
   background-image: 
-    radial-gradient(circle at 10% 20%, var(--primary-glow) 0%, transparent 45%),
-    radial-gradient(circle at 90% 80%, rgba(var(--primary-rgb), 0.04) 0%, transparent 45%),
-    radial-gradient(circle at 50% 50%, rgba(var(--secondary-rgb), 0.03) 0%, transparent 50%);
+    radial-gradient(circle at 10% 20%, rgba(var(--secondary-rgb), 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(var(--gold-rgb), 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(var(--primary-rgb), 0.04) 0%, transparent 50%);
 }
 
 #root {
@@ -120,14 +124,15 @@ body {
   height: 100vh;
 }
 
-/* --- iOS Device Frame (Cream Matte/Emerald Bezel) --- */
+/* --- iOS Device Frame (Mushroom Taupe & Champagne Bezel) --- */
 .phone-frame {
   width: var(--phone-width);
   height: var(--phone-height);
   background: var(--bg-phone);
   border-radius: 46px; /* Smooth rounded device shell */
   box-shadow: 
-    0 0 0 12px var(--bezel-color),  /* Soft dynamic white/jade bezel */
+    0 0 0 12px var(--bezel-color),  /* Soft dynamic white/taupe bezel */
+    0 0 0 13px rgba(244, 227, 193, 0.35), /* Exquisite champagne gold trim */
     var(--shadow-lg), /* Earthy soft dynamic shadow */
     inset 0 0 12px rgba(255, 255, 255, 0.4);
   position: relative;
@@ -164,7 +169,7 @@ body {
   transform: translateX(-50%);
   width: 110px;
   height: 4px;
-  background: rgba(var(--primary-rgb), 0.15);
+  background: rgba(var(--primary-rgb), 0.25);
   border-radius: 3px;
   z-index: 1000;
   pointer-events: none;
@@ -246,9 +251,9 @@ body {
 /* --- Editorial Typography --- */
 h1, h2, h3, h4 {
   font-family: var(--font-header);
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text-main);
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
 }
 
 p {
@@ -259,6 +264,39 @@ p {
 
 .bold {
   font-weight: 600;
+}
+
+.italic-serif {
+  font-family: var(--font-header);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--text-sub);
+}
+
+/* Elegant Architectural Editorial Arches */
+.editorial-arch {
+  border-top-left-radius: 99px;
+  border-top-right-radius: 99px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-glass);
+  transition: all var(--t-normal);
+}
+
+.editorial-arch:hover {
+  transform: scale(1.03) translateY(-2px);
+  box-shadow: 
+    var(--shadow-lg), 
+    0 8px 20px rgba(249, 195, 195, 0.15);
+  border-color: var(--border-glow);
+}
+
+.arched-header-container {
+  border-radius: 50% 50% 16px 16px / 28px 28px 16px 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
 }
 
 /* --- Dewy Frosted Glass Cards --- */
@@ -279,7 +317,7 @@ p {
   transform: translateY(-4px) scale(1.015); /* Sleek spring float */
   box-shadow: 
     var(--shadow-lg),
-    0 12px 24px rgba(74, 114, 94, 0.03);
+    0 12px 28px rgba(249, 195, 195, 0.12);
 }
 
 /* --- Status Indicators (Soft Glows) --- */
@@ -290,28 +328,28 @@ p {
   padding: 5px 12px;
   border-radius: 99px;
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border: 1px solid transparent;
 }
 
 .status-pill.healthy {
-  background: rgba(140, 174, 158, 0.15);
-  color: var(--primary);
-  border-color: rgba(140, 174, 158, 0.25);
+  background: rgba(205, 236, 212, 0.4);
+  color: #3b5842;
+  border-color: rgba(205, 236, 212, 0.6);
 }
 
 .status-pill.warning {
-  background: rgba(195, 123, 97, 0.12);
-  color: var(--gold);
-  border-color: rgba(195, 123, 97, 0.2);
+  background: rgba(244, 227, 193, 0.45);
+  color: #7c622f;
+  border-color: rgba(244, 227, 193, 0.6);
 }
 
 .status-pill.critical {
-  background: rgba(198, 94, 94, 0.1);
-  color: var(--crimson);
-  border-color: rgba(198, 94, 94, 0.18);
+  background: rgba(249, 195, 195, 0.4);
+  color: #8c3f3f;
+  border-color: rgba(249, 195, 195, 0.6);
 }
 
 /* --- Premium Charcoal-Moss Symmetrical Bottom Dock --- */
@@ -636,7 +674,7 @@ button.secondary-btn:active {
   position: absolute;
   width: 20px;
   height: 20px;
-  border-color: var(--secondary);
+  border-color: var(--gold);
   border-style: solid;
   pointer-events: none;
 }
@@ -748,7 +786,7 @@ button.secondary-btn:active {
   transition: all var(--t-fast);
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23496354' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23756a60' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 14px center;
   background-size: 16px;
@@ -756,7 +794,7 @@ button.secondary-btn:active {
 }
 
 [data-theme="dark"] .simulator-dropdown {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b2c9bd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9beb5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 }
 
 .simulator-dropdown:focus {
@@ -1498,7 +1536,7 @@ body::before {
   }
 }
 
-/* Checked scale spring and custom emerald glow animation */
+/* Checked scale spring and custom peony glow animation */
 .todo-item {
   transition: all var(--t-normal) !important;
 }
@@ -1506,7 +1544,7 @@ body::before {
 .todo-item.done {
   transform: scale(0.985);
   opacity: 0.6;
-  border-color: rgba(74, 114, 94, 0.1) !important;
+  border-color: rgba(197, 180, 165, 0.12) !important;
   box-shadow: none !important;
 }
 
@@ -1516,7 +1554,7 @@ body::before {
 
 .todo-checkbox.checked {
   animation: bouncePop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-  box-shadow: 0 0 8px rgba(74, 114, 94, 0.3) !important;
+  box-shadow: 0 0 8px rgba(249, 195, 195, 0.4) !important;
 }
 
 /* Garden Vitality Circular Dial class with glowing halo spotlight */
@@ -1527,7 +1565,7 @@ body::before {
 
 .garden-vitality-dial:hover {
   transform: scale(1.08);
-  box-shadow: 0 0 20px rgba(74, 114, 94, 0.25), var(--shadow-md) !important;
+  box-shadow: 0 0 20px rgba(249, 195, 195, 0.25), var(--shadow-md) !important;
 }
 
 /* Health Circular Progress Dial in Dossier Page */
@@ -1538,26 +1576,26 @@ body::before {
 
 .health-circular-progress:hover {
   transform: scale(1.08);
-  box-shadow: 0 0 20px rgba(74, 114, 94, 0.2), var(--shadow-md);
+  box-shadow: 0 0 20px rgba(249, 195, 195, 0.2), var(--shadow-md);
 }
 
 /* Agent-Specific High-Fidelity Bubble Themes */
 .chat-bubble.bot.sage {
-  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(74, 114, 94, 0.04) 100%) !important;
-  border-left: 3.5px solid var(--primary) !important;
-  box-shadow: 0 4px 16px rgba(74, 114, 94, 0.04) !important;
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(249, 195, 195, 0.04) 100%) !important;
+  border-left: 3.5px solid var(--secondary) !important; /* Peony Pink border */
+  box-shadow: 0 4px 16px rgba(249, 195, 195, 0.04) !important;
 }
 
 .chat-bubble.bot.flora {
-  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(213, 176, 103, 0.04) 100%) !important;
-  border-left: 3.5px solid var(--secondary) !important;
-  box-shadow: 0 4px 16px rgba(213, 176, 103, 0.04) !important;
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(197, 180, 165, 0.04) 100%) !important;
+  border-left: 3.5px solid var(--primary) !important; /* Mushroom Taupe border */
+  box-shadow: 0 4px 16px rgba(197, 180, 165, 0.04) !important;
 }
 
 .chat-bubble.bot.moss {
-  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(218, 156, 136, 0.04) 100%) !important;
-  border-left: 3.5px solid var(--gold) !important;
-  box-shadow: 0 4px 16px rgba(218, 156, 136, 0.04) !important;
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(205, 236, 212, 0.04) 100%) !important;
+  border-left: 3.5px solid var(--green) !important; /* Sprout Green border */
+  box-shadow: 0 4px 16px rgba(205, 236, 212, 0.04) !important;
 }
 
 /* Customized scrollbars for chat bubble containers */

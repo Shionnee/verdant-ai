@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Camera, Upload, AlertCircle, RefreshCw, X, Play, ShieldAlert } from "lucide-react";
+import { Camera, Upload, AlertCircle, RefreshCw, X, Play, ShieldAlert, Key } from "lucide-react";
 import { SIMULATOR_SELECTIONS, getMockDiagnosis } from "../utils/plantDatabase";
 import { analyzePlantWithGemini } from "../utils/geminiService";
 
-export default function Scanner({ apiKey, onScanComplete, onCancel }) {
+export default function Scanner({ apiKey, onSaveApiKey, onClearApiKey, onScanComplete, onCancel }) {
   const [hasCamera, setHasCamera] = useState(true);
   const [cameraActive, setCameraActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -13,6 +13,9 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
   const [selectedDemoPlant, setSelectedDemoPlant] = useState("monstera");
   const [selectedDemoCondition, setSelectedDemoCondition] = useState("healthy");
   const [showSandbox, setShowSandbox] = useState(false);
+  const [sandboxTab, setSandboxTab] = useState("scenarios"); // "scenarios" or "key"
+  const [inputKey, setInputKey] = useState("");
+  const [showKeyInputInline, setShowKeyInputInline] = useState(false);
 
   // Scan state managers
   const [scanning, setScanning] = useState(false);
@@ -28,19 +31,47 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
     return () => stopCamera();
   }, []);
 
+  // Attach stream when video element becomes active in DOM
+  useEffect(() => {
+    if (cameraActive && streamRef.current && videoRef.current) {
+      if (videoRef.current.srcObject !== streamRef.current) {
+        videoRef.current.srcObject = streamRef.current;
+        videoRef.current.play().catch(e => console.log("Play interrupted"));
+      }
+    }
+  }, [cameraActive, previewUrl]);
+
   const startCamera = async () => {
     setErrorMsg("");
     try {
       stopCamera(); // clear active streams
-      const constraints = {
-        video: { facingMode: "environment" },
-        audio: false
-      };
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play().catch(e => console.log("Play interrupted"));
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("Camera API is not supported by your browser or in this security context (requires HTTPS or localhost).");
       }
+
+      let stream;
+      try {
+        // Try ideal back-facing camera first (optimal for mobile plant scanning)
+        const constraints = {
+          video: { facingMode: { ideal: "environment" } },
+          audio: false
+        };
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+      } catch (firstErr) {
+        console.warn("Failed with ideal environment constraints, trying basic video constraints:", firstErr);
+        try {
+          // Fallback to simple video constraints (works for desktop webcams and single lenses)
+          const basicConstraints = {
+            video: true,
+            audio: false
+          };
+          stream = await navigator.mediaDevices.getUserMedia(basicConstraints);
+        } catch (secondErr) {
+          throw new Error("Failed to access camera stream. Please check permissions in your browser bar.");
+        }
+      }
+
       streamRef.current = stream;
       setCameraActive(true);
       setHasCamera(true);
@@ -48,6 +79,7 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
       console.warn("Camera not available:", err);
       setHasCamera(false);
       setCameraActive(false);
+      setErrorMsg(err.message || "Camera access denied or unavailable.");
     }
   };
 
@@ -204,13 +236,13 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
 
   return (
     <div className="scanner-viewport">
-      {/* 1. SCANNIN TIMELINE ANIMATION OVERLAY */}
+      {/* 1. SCANNING TIMELINE ANIMATION OVERLAY */}
       {scanning && (
         <div className="scanning-loader-container">
           <div className="loading-spinner"></div>
           
-          <h3 style={{ fontSize: "18px", marginBottom: "8px" }}>AI Biometrics Core</h3>
-          <p style={{ color: "var(--text-muted)", fontSize: "12px", marginBottom: "20px" }}>Analyzing plant organic matrices...</p>
+          <h3 className="italic-serif" style={{ fontSize: "20px", marginBottom: "6px", color: "var(--text-main)" }}>AI Biometrics Core</h3>
+          <p style={{ color: "var(--text-sub)", fontSize: "12px", marginBottom: "24px" }}>Analyzing plant organic matrices...</p>
 
           <div className="scan-progress-timeline">
             <div className={`scan-progress-step ${scanStep === 0 ? "active" : scanStep > 0 ? "completed" : ""}`}>
@@ -227,18 +259,17 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
             </div>
             <div className={`scan-progress-step ${scanStep === 3 ? "active" : scanStep > 3 ? "completed" : ""}`}>
               <div className="scan-progress-icon"></div>
-              <span>Consulting Dr. Sage AI network...</span>
+              <span>Consulting Council Agents...</span>
             </div>
           </div>
         </div>
       )}
 
-      {/* Camera / Upload Viewport */}
+      {/* Camera / Viewport Container */}
       <div className="camera-container">
-        {/* Floating Sandbox Simulation Badge */}
-        {!apiKey && !selectedFile && (
-          <button 
-            onClick={() => setShowSandbox(prev => !prev)}
+        {/* Floating Gemini Key Badge if connected */}
+        {apiKey && !selectedFile && (
+          <div 
             className="glass-card" 
             style={{ 
               position: "absolute", 
@@ -246,7 +277,7 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
               left: "50%", 
               transform: "translateX(-50%)", 
               zIndex: 50, 
-              background: "rgba(13, 22, 18, 0.8)", 
+              background: "rgba(30, 25, 22, 0.85)", 
               borderColor: "var(--border-glass)", 
               borderRadius: "99px", 
               padding: "8px 16px",
@@ -254,15 +285,49 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
               alignItems: "center",
               gap: "8px",
               color: "var(--secondary)",
+              fontSize: "11px",
+              fontWeight: "600",
+              whiteSpace: "nowrap",
+              boxShadow: "0 6px 20px rgba(0,0,0,0.3)"
+            }}
+          >
+            <span className="chat-pulse-dot" style={{ background: "var(--secondary)", width: "6px", height: "6px" }}></span>
+            ✨ Gemini AI Live Connected
+          </div>
+        )}
+
+        {/* Floating Sandbox Simulation Badge if no API key */}
+        {!apiKey && !selectedFile && (
+          <button 
+            onClick={() => {
+              setShowSandbox(prev => !prev);
+              setSandboxTab("scenarios");
+            }}
+            className="glass-card" 
+            style={{ 
+              position: "absolute", 
+              top: "20px", 
+              left: "50%", 
+              transform: "translateX(-50%)", 
+              zIndex: 50, 
+              background: "rgba(30, 25, 22, 0.85)", 
+              borderColor: "var(--border-glass)", 
+              borderRadius: "99px", 
+              padding: "8px 16px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "var(--gold)",
               cursor: "pointer",
               fontSize: "11.5px",
               fontWeight: "600",
               whiteSpace: "nowrap",
-              boxShadow: "0 6px 20px rgba(0,0,0,0.4)"
+              boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
+              transition: "transform var(--t-fast)"
             }}
           >
-            <span className="chat-pulse-dot" style={{ background: "var(--secondary)", width: "6px", height: "6px" }}></span>
-            🧪 {showSandbox ? "Close Sandbox" : "Choose Sandbox Demo"}
+            <span className="chat-pulse-dot" style={{ background: "var(--gold)", width: "6px", height: "6px" }}></span>
+            🧪 {showSandbox ? "Close Settings" : "Simulation & Key Settings"}
           </button>
         )}
 
@@ -271,7 +336,7 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
             {/* Live Camera Viewfinder */}
             <video ref={videoRef} className="camera-stream" playsInline muted></video>
             
-            {/* HUD Overlay */}
+            {/* HUD Overlay with fine-art wireframe corners (Champagne Gold in index.css) */}
             <div className="scanner-viewfinder">
               <div className="scanner-corner tl"></div>
               <div className="scanner-corner tr"></div>
@@ -303,34 +368,71 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
           </div>
         ) : (
           /* Camera Blocked/Fallback Upload Dropzone */
-          <div style={{ padding: "40px 20px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", width: "100%" }}>
-            <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: "rgba(255, 255, 255, 0.04)", display: "flex", color: "var(--text-sub)", border: "1px solid var(--border-glass)" }}>
-              <Upload size={32} style={{ margin: "auto" }} />
+          <div style={{ padding: "40px 20px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "20px", width: "100%" }}>
+            <div style={{ 
+              width: "76px", 
+              height: "76px", 
+              borderRadius: "50%", 
+              background: "rgba(255, 255, 255, 0.04)", 
+              display: "flex", 
+              color: "var(--text-muted)", 
+              border: "1px solid var(--border-glass)",
+              boxShadow: "inset 0 2px 8px rgba(0,0,0,0.1)"
+            }}>
+              <Upload size={32} style={{ margin: "auto", color: "var(--primary)" }} />
             </div>
             <div>
-              <h3 style={{ marginBottom: "6px", color: "white" }}>Import Foliage Imagery</h3>
-              <p style={{ fontSize: "12px", maxWidth: "280px", margin: "auto", color: "rgba(255,255,255,0.6)" }}>
+              <h3 className="italic-serif" style={{ marginBottom: "6px", color: "white", fontSize: "22px" }}>Import Foliage Imagery</h3>
+              <p style={{ fontSize: "12px", maxWidth: "280px", margin: "auto", color: "rgba(255,255,255,0.55)", lineHeight: "1.5" }}>
                 Live camera access is restricted or unavailable. Drag and drop or browse a photo file to run diagnosis.
               </p>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "center" }}>
-              <label className="secondary-btn" style={{ padding: "10px 18px", fontSize: "13px", cursor: "pointer", background: "rgba(255,255,255,0.06)", color: "white", border: "1px solid rgba(255,255,255,0.15)" }}>
-                <Upload size={16} />
-                Browse Media
-                <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
-              </label>
+            <div style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "center", width: "100%" }}>
+              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", justifyContent: "center" }}>
+                <button 
+                  onClick={startCamera}
+                  className="primary-btn" 
+                  style={{ 
+                    padding: "12px 20px", 
+                    fontSize: "13px", 
+                    borderRadius: "99px", 
+                    display: "flex", 
+                    alignItems: "center", 
+                    gap: "8px",
+                    background: "var(--gold)",
+                    color: "var(--text-main)",
+                    border: "none",
+                    fontWeight: "600",
+                    cursor: "pointer"
+                  }}
+                >
+                  <RefreshCw size={14} />
+                  Retry Camera
+                </button>
+
+                <label className="secondary-btn" style={{ padding: "12px 20px", fontSize: "13px", cursor: "pointer", background: "rgba(255,255,255,0.06)", color: "white", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "99px", display: "flex", alignItems: "center", gap: "8px" }}>
+                  <Upload size={16} />
+                  Browse Media
+                  <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
+                </label>
+              </div>
               
               {!apiKey && (
                 <button 
-                  onClick={() => setShowSandbox(true)}
+                  onClick={() => {
+                    setShowSandbox(true);
+                    setSandboxTab("scenarios");
+                  }}
                   style={{ 
                     background: "none", 
                     border: "none", 
-                    color: "var(--secondary)", 
+                    color: "var(--gold)", 
                     fontSize: "12px", 
                     textDecoration: "underline", 
                     cursor: "pointer", 
-                    fontWeight: "500"
+                    fontWeight: "600",
+                    letterSpacing: "0.2px",
+                    marginTop: "4px"
                   }}
                 >
                   🧪 Or, try sandbox demo scenarios
@@ -342,8 +444,8 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
 
         {/* Global Error Banner */}
         {errorMsg && (
-          <div className="glass-card" style={{ position: "absolute", top: "20px", left: "20px", right: "20px", background: "rgba(239, 68, 68, 0.95)", display: "flex", gap: "10px", padding: "12px 16px", zIndex: 100, border: "none" }}>
-            <AlertCircle size={20} style={{ flexShrink: 0 }} />
+          <div className="glass-card" style={{ position: "absolute", top: "20px", left: "20px", right: "20px", background: "rgba(214, 123, 123, 0.95)", display: "flex", gap: "10px", padding: "12px 16px", zIndex: 100, border: "none" }}>
+            <AlertCircle size={20} style={{ flexShrink: 0, color: "white" }} />
             <p style={{ color: "white", fontSize: "11px", lineHeight: "1.4" }}>{errorMsg}</p>
           </div>
         )}
@@ -367,14 +469,14 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
         </div>
       )}
 
-      {/* 3. SIMULATOR DIAGNOSTIC SELECTIONS DRAWER */}
+      {/* 3. SIMULATOR DIAGNOSTIC / API KEY DRAWER */}
       {showSandbox && !selectedFile && !scanning && (
         <div className="simulation-selector">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <ShieldAlert size={16} style={{ color: "var(--secondary)" }} />
-              <span style={{ fontSize: "11px", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.5px", color: "var(--text-sub)" }}>
-                Sandbox Mode Active
+              <ShieldAlert size={16} style={{ color: "var(--gold)" }} />
+              <span style={{ fontSize: "11px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.8px", color: "var(--text-sub)" }}>
+                Scanner Options Panel
               </span>
             </div>
             <button 
@@ -392,72 +494,233 @@ export default function Scanner({ apiKey, onScanComplete, onCancel }) {
             </button>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            {/* Plant selection */}
-            <div>
-              <label style={{ fontSize: "10px", color: "var(--text-muted)", display: "block", marginBottom: "4px" }}>Select Demo Species</label>
-              <select 
-                value={selectedDemoPlant}
-                onChange={(e) => {
-                  setSelectedDemoPlant(e.target.value);
-                  // Auto pick first condition
-                  const details = SIMULATOR_SELECTIONS.find(p => p.plantId === e.target.value);
-                  setSelectedDemoCondition(details.conditions[0].id);
-                }}
-                className="simulator-dropdown"
-              >
-                {SIMULATOR_SELECTIONS.map(p => (
-                  <option key={p.plantId} value={p.plantId}>{p.plantName}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Condition selection */}
-            <div>
-              <label style={{ fontSize: "10px", color: "var(--text-muted)", display: "block", marginBottom: "4px" }}>Select Health Scenario</label>
-              <select 
-                value={selectedDemoCondition}
-                onChange={(e) => setSelectedDemoCondition(e.target.value)}
-                className="simulator-dropdown"
-              >
-                {currentDemoPlantDetails?.conditions.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Scan Action Button */}
+          {/* Luxury Settings Tabs */}
+          <div style={{ display: "flex", gap: "16px", borderBottom: "1px solid var(--border-glass)", marginBottom: "16px", paddingBottom: "6px" }}>
             <button 
-              className="primary-btn" 
-              onClick={handleScanSubmit} 
-              style={{ marginTop: "4px", width: "100%" }}
+              onClick={() => setSandboxTab("scenarios")}
+              style={{
+                background: "none",
+                border: "none",
+                color: sandboxTab === "scenarios" ? "var(--text-main)" : "var(--text-muted)",
+                fontSize: "12px",
+                fontWeight: "700",
+                cursor: "pointer",
+                position: "relative",
+                padding: "6px 0",
+                fontFamily: "var(--font-body)"
+              }}
             >
-              <Play size={16} />
-              Simulate Visual Scan
+              🧪 Demo Scenarios
+              {sandboxTab === "scenarios" && <div style={{ position: "absolute", bottom: "-7px", left: 0, right: 0, height: "2px", background: "var(--secondary)", borderRadius: "1px" }}></div>}
+            </button>
+            <button 
+              onClick={() => setSandboxTab("key")}
+              style={{
+                background: "none",
+                border: "none",
+                color: sandboxTab === "key" ? "var(--text-main)" : "var(--text-muted)",
+                fontSize: "12px",
+                fontWeight: "700",
+                cursor: "pointer",
+                position: "relative",
+                padding: "6px 0",
+                fontFamily: "var(--font-body)"
+              }}
+            >
+              🔑 Connect Gemini AI
+              {sandboxTab === "key" && <div style={{ position: "absolute", bottom: "-7px", left: 0, right: 0, height: "2px", background: "var(--secondary)", borderRadius: "1px" }}></div>}
             </button>
           </div>
+
+          {/* Tab Contents */}
+          {sandboxTab === "scenarios" ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {/* Plant selection */}
+              <div>
+                <label style={{ fontSize: "10px", color: "var(--text-sub)", fontWeight: "600", display: "block", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.2px" }}>Select Demo Species</label>
+                <select 
+                  value={selectedDemoPlant}
+                  onChange={(e) => {
+                    setSelectedDemoPlant(e.target.value);
+                    // Auto pick first condition
+                    const details = SIMULATOR_SELECTIONS.find(p => p.plantId === e.target.value);
+                    setSelectedDemoCondition(details.conditions[0].id);
+                  }}
+                  className="simulator-dropdown"
+                >
+                  {SIMULATOR_SELECTIONS.map(p => (
+                    <option key={p.plantId} value={p.plantId}>{p.plantName}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Condition selection */}
+              <div>
+                <label style={{ fontSize: "10px", color: "var(--text-sub)", fontWeight: "600", display: "block", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.2px" }}>Select Health Scenario</label>
+                <select 
+                  value={selectedDemoCondition}
+                  onChange={(e) => setSelectedDemoCondition(e.target.value)}
+                  className="simulator-dropdown"
+                >
+                  {currentDemoPlantDetails?.conditions.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Scan Action Button */}
+              <button 
+                className="primary-btn" 
+                onClick={handleScanSubmit} 
+                style={{ marginTop: "6px", width: "100%", padding: "12px", display: "flex", justifyContents: "center", alignItems: "center", gap: "8px" }}
+              >
+                <Play size={16} fill="currentColor" />
+                Simulate Visual Scan
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              <p style={{ fontSize: "11.5px", color: "var(--text-sub)", lineHeight: "1.5", marginBottom: "4px" }}>
+                Unlock high-fidelity diagnosis using live Google Gemini AI. Enter your API key below. It remains secure inside your browser's private storage.
+              </p>
+              
+              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                <div style={{ position: "relative", flex: 1 }}>
+                  <Key size={14} style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
+                  <input 
+                    type="password" 
+                    value={inputKey} 
+                    onChange={(e) => setInputKey(e.target.value)} 
+                    placeholder="Enter Gemini API key..." 
+                    style={{
+                      width: "100%",
+                      background: "var(--bg-card)",
+                      border: "1px solid var(--border-glass)",
+                      borderRadius: "12px",
+                      padding: "10px 10px 10px 32px",
+                      color: "var(--text-main)",
+                      fontSize: "12.5px",
+                      outline: "none",
+                      fontFamily: "monospace",
+                      transition: "border var(--t-fast)"
+                    }}
+                  />
+                </div>
+                <button 
+                  onClick={() => {
+                    if (inputKey.trim()) {
+                      onSaveApiKey(inputKey.trim());
+                      setShowSandbox(false);
+                      setInputKey("");
+                    }
+                  }}
+                  className="primary-btn"
+                  style={{ padding: "10px 16px", fontSize: "12px" }}
+                >
+                  Save
+                </button>
+              </div>
+              <a 
+                href="https://aistudio.google.com/" 
+                target="_blank" 
+                rel="noreferrer" 
+                style={{ fontSize: "11px", color: "var(--text-muted)", textDecoration: "underline", alignSelf: "flex-start", marginTop: "2px" }}
+              >
+                Get a free API Key from Google AI Studio ↗
+              </a>
+            </div>
+          )}
         </div>
       )}
 
-      {/* 4. REAL OR SIMULATED AI DIAGNOSTIC SUBMISSION VIEW */}
+      {/* 4. REAL OR SIMULATED AI DIAGNOSTIC SUBMISSION VIEW (ONCE FILE CAPTURED) */}
       {selectedFile && !scanning && (
         <div className="simulation-selector" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <div>
-            <h4 style={{ fontSize: "14px", marginBottom: "4px", color: "var(--primary)" }}>
+            <h4 className="italic-serif" style={{ fontSize: "18px", marginBottom: "4px", color: "var(--text-main)" }}>
               {apiKey ? "Foliage Image Cached" : "Foliage Image Cached (Simulation)"}
             </h4>
-            <p style={{ fontSize: "11px", color: "var(--text-sub)", lineHeight: "1.4" }}>
+            <p style={{ fontSize: "11.5px", color: "var(--text-sub)", lineHeight: "1.5" }}>
               {apiKey 
-                ? "Ready for deep neural analysis. Direct Google Gemini connection configured."
-                : "No API Key Set — Simulated Analysis Active. We will simulate a professional diagnostic scan on your custom image."}
+                ? "Perfect alignment achieved. Your image is ready for deep neural analysis via Gemini 1.5 Flash."
+                : "No API Key Connected — Simulated Analysis Active. We will simulate a scientific diagnostic scan on your custom image."}
             </p>
+            
+            {/* Inline key input if they want to switch to real scan! */}
+            {!apiKey && (
+              <div style={{ marginTop: "10px" }}>
+                {showKeyInputInline ? (
+                  <div style={{ display: "flex", gap: "8px", alignItems: "center", marginTop: "6px" }}>
+                    <div style={{ position: "relative", flex: 1 }}>
+                      <Key size={12} style={{ position: "absolute", left: "8px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
+                      <input 
+                        type="password" 
+                        value={inputKey} 
+                        onChange={(e) => setInputKey(e.target.value)} 
+                        placeholder="Paste key (AIzaSy...)" 
+                        style={{
+                          width: "100%",
+                          background: "var(--bg-card)",
+                          border: "1px solid var(--border-glass)",
+                          borderRadius: "10px",
+                          padding: "8px 8px 8px 26px",
+                          color: "var(--text-main)",
+                          fontSize: "11.5px",
+                          outline: "none",
+                          fontFamily: "monospace"
+                        }}
+                      />
+                    </div>
+                    <button 
+                      onClick={() => {
+                        if (inputKey.trim()) {
+                          onSaveApiKey(inputKey.trim());
+                          setInputKey("");
+                          setShowKeyInputInline(false);
+                        }
+                      }}
+                      className="primary-btn"
+                      style={{ padding: "8px 14px", fontSize: "11.5px" }}
+                    >
+                      Save
+                    </button>
+                    <button 
+                      onClick={() => setShowKeyInputInline(false)}
+                      style={{ background: "none", border: "none", color: "var(--text-muted)", fontSize: "11.5px", cursor: "pointer", marginLeft: "4px" }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <button 
+                    onClick={() => setShowKeyInputInline(true)}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "var(--secondary)",
+                      fontSize: "11.5px",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                      padding: 0,
+                      fontWeight: "700",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px"
+                    }}
+                  >
+                    🔑 Connect Gemini Key to run real AI scan
+                  </button>
+                )}
+              </div>
+            )}
           </div>
-          <div style={{ display: "flex", gap: "10px" }}>
-            <button className="secondary-btn" onClick={resetScanner} style={{ flex: 1, padding: "10px", fontSize: "12.5px" }}>
+          
+          <div style={{ display: "flex", gap: "10px", marginTop: "4px" }}>
+            <button className="secondary-btn" onClick={resetScanner} style={{ flex: 1, padding: "12px", fontSize: "13px", borderRadius: "99px" }}>
               Retake
             </button>
-            <button className="primary-btn" onClick={handleScanSubmit} style={{ flex: 2, padding: "10px", fontSize: "12.5px" }}>
-              <Play size={16} />
+            <button className="primary-btn" onClick={handleScanSubmit} style={{ flex: 2, padding: "12px", fontSize: "13px", borderRadius: "99px", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>
+              <Play size={14} fill="currentColor" />
               {apiKey ? "Run AI Analysis" : "Simulate AI Scan"}
             </button>
           </div>

@@ -407,7 +407,7 @@ export default function BotanistChat({ apiKey, activePlantContext, onClearContex
                     cursor: "pointer",
                     transition: "all var(--t-normal)",
                     transform: isActive ? "scale(1.02)" : "scale(1)",
-                    border: isActive ? "1px solid rgba(74, 114, 94, 0.15)" : "1px solid transparent",
+                    border: isActive ? "1px solid var(--border-glow)" : "1px solid transparent",
                     boxShadow: isActive ? "var(--shadow-sm)" : "none",
                     outline: "none"
                   }}
