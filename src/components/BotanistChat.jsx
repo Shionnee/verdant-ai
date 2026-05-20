@@ -325,7 +325,9 @@ export default function BotanistChat({ apiKey, activePlantContext, onClearContex
 
   const activeAgent = AGENTS.find(a => a.id === activeAgentId) || AGENTS[0];
   const suggestedPrompts = getSuggestedPrompts();
-  const currentMessages = messagesByA  // Dynamic description for the active agent in the sidebar
+  const currentMessages = messagesByAgent[activeAgentId];
+
+  // Dynamic description for the active agent in the sidebar
   const getSidebarAgentInfo = () => {
     switch (activeAgentId) {
       case "flora":

@@ -1410,32 +1410,83 @@ body::before {
     left: auto;
     right: auto;
     width: 100%;
-    margin-bottom: 24px;
-    box-shadow: var(--shadow-sm);
-    height: 70px;
-    padding: 0 24px;
-    border-radius: 20px;
+    margin-top: 0;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow-md);
+    height: 72px;
+    padding: 0 28px;
+    border-radius: 99px; /* Floating capsule container */
+    background: var(--bg-nav);
+    border: 1px solid var(--border-glass);
+    display: flex !important;
+    justify-content: center !important; /* Center navigation buttons in the top dock */
+    align-items: center !important;
+    gap: 12px;
+    order: -1; /* Visually push navigation to the top on desktop! */
+    transition: all var(--t-normal);
+  }
+
+  .webapp-frame .nav-item {
+    flex: none !important; /* Prevent button stretching on desktop */
+    flex-direction: row !important; /* Horizontal Icon + Text alignment */
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 22px !important;
+    border-radius: 99px !important; /* Elegant pill capsule shape */
+    height: 46px !important;
+    color: var(--text-sub) !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    transition: all var(--t-normal) !important;
+  }
+
+  .webapp-frame .nav-item:hover {
+    background: rgba(var(--primary-rgb), 0.06) !important;
+    color: var(--text-main) !important;
   }
 
   .webapp-frame .nav-item span {
-    display: inline-block !important; /* Keep all labels visible on desktop webapp mode */
-    margin-left: 6px;
+    display: inline-block !important; /* Keep labels fully visible beside the icon */
+    margin-left: 8px;
+    font-size: 11px !important;
+    letter-spacing: 0.5px !important;
   }
-  
+
   .webapp-frame .nav-item.active {
-    box-shadow: var(--shadow-sm);
+    background: var(--primary-glow) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border-glow) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+
+  .webapp-frame .nav-item.active::after {
+    margin-left: 8px;
+    margin-top: 0 !important;
   }
 
   .webapp-frame .nav-item-scan-fab {
     transform: none !important;
-    width: 44px;
-    height: 44px;
+    width: 46px !important;
+    height: 46px !important;
+    margin: 0 6px !important;
+    border-radius: 50% !important;
     box-shadow: var(--shadow-sm) !important;
-    border-radius: 50%;
+    background: linear-gradient(135deg, var(--secondary), var(--gold)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all var(--t-normal) !important;
   }
-  
+
+  .webapp-frame .nav-item-scan-fab:hover {
+    transform: scale(1.08) !important;
+    box-shadow: 0 6px 20px rgba(var(--gold-rgb), 0.45) !important;
+  }
+
   .webapp-frame .nav-item-scan-fab.active {
-    transform: scale(1.05) !important;
+    transform: scale(1.08) !important;
+    box-shadow: 0 6px 20px rgba(var(--gold-rgb), 0.45) !important;
   }
 
   /* Make Screen Containers fluid and wide-grid-compatible */
