@@ -51,6 +51,8 @@
   
   --bezel-color: #e6ded6;        /* Elegant matte mushroom taupe bezel */
   --bg-nav: rgba(255, 255, 255, 0.82);   /* Soft Translucent Porcelain Warm White */
+  --bg-notebook: linear-gradient(to bottom, rgba(255, 253, 249, 0.96), rgba(255, 253, 249, 0.98));
+  --border-notebook-margin: rgba(249, 195, 195, 0.55);
 }
 
 [data-theme="dark"] {
@@ -87,6 +89,8 @@
   
   --bezel-color: #2e2822;        /* Matte espresso clay bezel */
   --bg-nav: rgba(31, 26, 21, 0.85);      /* Warm Chocolate Espresso with transparency */
+  --bg-notebook: linear-gradient(to bottom, rgba(41, 35, 30, 0.95), rgba(31, 26, 21, 0.97));
+  --border-notebook-margin: rgba(250, 162, 162, 0.35);
 }
 
 /* --- Base Resets & Global Styles --- */

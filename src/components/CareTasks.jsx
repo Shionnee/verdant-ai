@@ -71,10 +71,10 @@ export default function CareTasks() {
         className="glass-card" 
         style={{ 
           padding: "24px 20px 20px 20px", 
-          background: "linear-gradient(to bottom, rgba(255, 253, 249, 0.96), rgba(255, 253, 249, 0.98))", 
+          background: "var(--bg-notebook)", 
           border: "1px solid var(--border-glass)", 
           borderRadius: "24px",
-          boxShadow: "0 10px 30px rgba(117, 106, 96, 0.08)",
+          boxShadow: "var(--shadow-md)",
           position: "relative",
           overflow: "hidden",
           marginBottom: "20px"
@@ -87,7 +87,7 @@ export default function CareTasks() {
           bottom: 0,
           left: "42px",
           width: "1.2px",
-          background: "rgba(249, 195, 195, 0.55)",
+          background: "var(--border-notebook-margin)",
           zIndex: 2
         }} />
 
